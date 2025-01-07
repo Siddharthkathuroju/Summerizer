@@ -5,7 +5,7 @@ Mr. Summerizer is a powerful AI-driven tool designed to simplify the process of 
 ---
 
 Features
-- **Paste or Upload**: Input text directly into the text area or upload files in various formats.
+- **Paste or Upload**: Input text directly into the text area or upload files in PDF format.
 - **AI-Powered Summarization**: Harness the power of AI to generate accurate and context-aware summaries.
 - **Responsive Design**: Optimized for all devices, ensuring a seamless user experience.
 - **Real-Time Results**: Quickly process and receive summaries in seconds.
@@ -15,7 +15,7 @@ Features
 Technologies Used
 - **Frontend**: React and Next.js for a fast, modern, and responsive interface.
 - **Styling**: Tailwind CSS for a clean and customizable design.
-- **Backend**: API routes in Next.js to handle requests and communicate with the Gemini API.
+- **Backend**: API routes in Next.js to handle requests and communicate with the Gemini API. The text reading or extraction is done by the library pdfparse.
 - **Gemini API**: A powerful summarization API for generating summaries from textual content.
 
 ---
@@ -49,15 +49,7 @@ Setup and Installation
    ```
 5. Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
----
 
-Future Enhancements
-- Support for additional file formats (PDF, Word, etc.).
-- History tracking for previously summarized texts.
-- Multi-language support for global accessibility.
-- Improved error handling and UI feedback.
-
----
 
 Contributing
 Contributions are welcome! Feel free to open an issue or submit a pull request for bug fixes, enhancements, or new features.
