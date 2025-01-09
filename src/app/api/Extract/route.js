@@ -1,3 +1,4 @@
+// filepath: /c:/Users/siddh/OneDrive/Desktop/text_summary/src/app/api/Extract/route.js
 import { NextResponse } from "next/server";
 import pdfParse from "pdf-parse";
 
@@ -17,30 +18,29 @@ export async function POST(req) {
     }
 
     const boundary = contentType.split("boundary=")[1];
+    if (!boundary) {
+      return NextResponse.json({ error: "Boundary not found in content type" }, { status: 400 });
+    }
     console.log("Boundary:", boundary);
-    const rawBody = await req.arrayBuffer();
+
+    let rawBody;
+    try {
+      rawBody = await req.arrayBuffer();
+    } catch (error) {
+      console.error("Error reading request body:", error);
+      return NextResponse.json({ error: "Error reading request body" }, { status: 500 });
+    }
+
     const parts = new TextDecoder().decode(rawBody).split(`--${boundary}`);
     const pdfFilePart = parts.find((part) => part.includes("filename"));
 
     if (!pdfFilePart) {
-      console.error("No PDF file found in the request.");
-      return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
+      return NextResponse.json({ error: "PDF file not found in the request" }, { status: 400 });
     }
 
-    const fileStartIndex = pdfFilePart.indexOf("\r\n\r\n") + 4;
-    const fileEndIndex = pdfFilePart.lastIndexOf("\r\n--");
-    const pdfBuffer = Buffer.from(pdfFilePart.slice(fileStartIndex, fileEndIndex).trim(), "binary");
-
-    console.log("PDF file received and parsed.");
-
-    const pdfData = await pdfParse(pdfBuffer);
-    const extractedText = pdfData.text;
-
-    console.log("Text extraction successful.");
-
-    return NextResponse.json({ extractedText });
+    // Continue processing the PDF file part...
   } catch (error) {
-    console.error("Error processing file:", error);
-    return NextResponse.json({ error: `Failed to process file: ${error.message}` }, { status: 500 });
+    console.error("Error processing request:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
