@@ -1,52 +1,43 @@
 "use client";
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function Form() {
-  const [inputText, setInputText] = useState('');
-  const [generatedContent, setGeneratedContent] = useState('');
+  const [inputText, setInputText] = useState("");
+  const [generatedContent, setGeneratedContent] = useState("");
   const [loading, setLoading] = useState(false);
-  const [file, setFile] = useState(null);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
+    setGeneratedContent("");
 
-    const isFileUploaded = !!file;
-    const endpoint = isFileUploaded ? '/api/text/' : '/api/Summerize/';
+    let textToSummarize = inputText;
 
     try {
-      const response = isFileUploaded
-        ? await fetch(endpoint, {
-            method: 'POST',
-            body: (() => {
-              const formData = new FormData();
-              formData.append('file', file);
-              return formData;
-            })(),
-          })
-        : await fetch(endpoint, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ action: 'summarize', text: inputText }),
-          });
+      const summarizeResponse = await fetch("/api/Summerize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: textToSummarize }),
+      });
 
-      const data = await response.json();
-      if (response.ok) {
-        setGeneratedContent(data.content);
+      const summarizeData = await summarizeResponse.json();
+
+      if (summarizeResponse.ok) {
+        setGeneratedContent(summarizeData.content);
       } else {
-        console.error('Error:', data.error);
+        console.error("Error:", summarizeData.error);
+        setError(summarizeData.error || "Something went wrong while summarizing.");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
+      setError("Failed to fetch data. Please check your network connection.");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
   };
 
   return (
@@ -55,23 +46,19 @@ export default function Form() {
         <textarea
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          placeholder="Enter text to generate content"
+          placeholder="Enter text manually"
           className="textarea"
-          disabled={loading || !!file} // Disable textarea when a file is uploaded
-        />
-        <p className="text-sm text-gray-500">OR</p>
-        <input
-          type="file"
-          accept="application/pdf"
-          onChange={handleFileChange}
-          className="file-input"
           disabled={loading}
         />
-        <button type="submit" disabled={loading || (!inputText && !file)} className="submit-btn">
-          {loading ? 'Generating...' : 'Summarize Content'}
+        <button
+          type="submit"
+          disabled={loading || !inputText.trim()}
+          className="submit-btn"
+        >
+          {loading ? "Processing..." : "Summarize"}
         </button>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
       </form>
-
       {generatedContent && (
         <div className="result">
           <h3>Summary:</h3>
