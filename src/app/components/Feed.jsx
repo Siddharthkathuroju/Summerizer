@@ -32,7 +32,7 @@ export default function Feed() {
     setExtractedText("");
 
     try {
-      const response = await fetch("/api/Extract", {
+      const response = await fetch("/api/testing", {
         method: "POST",
         body: formData,
       });
