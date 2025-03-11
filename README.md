@@ -13,7 +13,7 @@ Features
 ---
 
 Technologies Used
-- **Frontend**: React and Next.js for a fast, modern, and responsive interface.
+- **Frontend**:  Next.js for a fast, modern, and responsive interface.
 - **Styling**: Tailwind CSS for a clean and customizable design.
 - **Backend**: API routes in Next.js to handle requests and communicate with the Gemini API. The text reading or extraction is done by the library pdfparse.
 - **Gemini API**: A powerful summarization API for generating summaries from textual content.
