@@ -8,7 +8,7 @@ Features
 - **Paste or Upload**: Input text directly into the text area or upload files in PDF format.
 - **AI-Powered Summarization**: Harness the power of AI to generate accurate and context-aware summaries.
 - **Responsive Design**: Optimized for all devices, ensuring a seamless user experience.
-- **Real-Time Results**: Quickly process and receive summaries in seconds.
+- **Real-Time Results**: Quickly process and receive summaries in few seconds.
 
 ---
 
